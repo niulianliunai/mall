@@ -1,5 +1,7 @@
 package com.cl.security.security.custom;
 
+import com.cl.security.service.PermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
@@ -19,17 +21,18 @@ import java.util.Collection;
  */
 @Component
 public class CustomAccessDecisionManager implements AccessDecisionManager {
-    @Value("${security.open.url}")
-    private String[] openUrl;
     @Value("${security.open.source}")
     private String[] openSource;
+    @Autowired
+    PermissionService permissionService;
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
         // 获取请求url
         String requestUrl = ((FilterInvocation) o).getRequestUrl();
         // 从url获取需要的权限， 如果包含问号就去掉
         String needPermission = requestUrl.replace("/",":").substring(1, !requestUrl.contains("?") ? requestUrl.length() : requestUrl.indexOf("?"));
-        if (Arrays.asList(openUrl).contains(needPermission)){
+
+        if (permissionService.isPublic(needPermission)) {
             return;
         }
         if (Arrays.stream(openSource).anyMatch(needPermission::contains)){
@@ -40,7 +43,6 @@ public class CustomAccessDecisionManager implements AccessDecisionManager {
         boolean havePermission = authorities.stream()
                 .anyMatch(authority ->
                             needPermission.equals(authority.getAuthority()));
-
 
         if (havePermission) {
             // 放行

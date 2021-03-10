@@ -24,8 +24,7 @@ public class Permission {
     private Long id;
     private String name;
     private String value;
-    private int type;
-    private int sort;
+    private int type; // 0 公开 1 需要权限
 
     @JsonIgnore
     @ManyToMany(mappedBy = "permissions")

@@ -18,6 +18,7 @@ import java.util.*;
 */
 @RestController
 @RequestMapping("user")
+@CrossOrigin
 public class UserController {
     @Autowired
     private UserService userService ;
@@ -55,6 +56,11 @@ public class UserController {
         Long userId = userService.getUserIdFromRequest(request);
         Set<Permission> permissions = userService.getPermissionList(userId);
         return CommonResult.success(permissions);
+    }
+
+    @GetMapping("info")
+    public CommonResult<User> getUserInfo(String token) {
+        return CommonResult.success(userService.getUserByToken(token));
     }
     @GetMapping("test")
     public CommonResult test() {
