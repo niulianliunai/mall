@@ -8,7 +8,7 @@ package com.cl.security.common.result;
 public enum ResultCodeEnum {
     SUCCESS(200, "操作成功"),
     FAILED(500, "操作失败"),
-    VALIDATE_FAILED(404, "参数校验失败"),
+    VALIDATE_FAILED(405, "参数校验失败"),
     UNAUTHORIZED(401, "暂未登录或token过期"),
     FORBIDDEN(403, "没有权限");
     // 状态码
