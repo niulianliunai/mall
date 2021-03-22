@@ -21,8 +21,6 @@ import java.util.Collection;
  */
 @Component
 public class CustomAccessDecisionManager implements AccessDecisionManager {
-    @Value("${security.open.source}")
-    private String[] openSource;
     @Autowired
     PermissionService permissionService;
     @Override
@@ -30,19 +28,16 @@ public class CustomAccessDecisionManager implements AccessDecisionManager {
         // 获取请求url
         String requestUrl = ((FilterInvocation) o).getRequestUrl();
         // 从url获取需要的权限， 如果包含问号就去掉
-        String needPermission = requestUrl.replace("/",":").substring(1, !requestUrl.contains("?") ? requestUrl.length() : requestUrl.indexOf("?"));
+        String path = requestUrl.substring(1, !requestUrl.contains("?") ? requestUrl.length() : requestUrl.indexOf("?"));
 
-        if (permissionService.isPublic(needPermission)) {
-            return;
-        }
-        if (Arrays.stream(openSource).anyMatch(needPermission::contains)){
+        if (!permissionService.isExist(path)) {
             return;
         }
         // 获取用户的权限列表
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         boolean havePermission = authorities.stream()
                 .anyMatch(authority ->
-                            needPermission.equals(authority.getAuthority()));
+                            path.equals(authority.getAuthority()));
 
         if (havePermission) {
             // 放行

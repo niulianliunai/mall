@@ -17,15 +17,15 @@ public class PermissionService {
     @Autowired
     PermissionRepository permissionRepository;
 
-    public boolean isPublic(String needPermission) {
+    public boolean isExist(String path) {
         Specification<Permission> specification = new Specification<Permission>() {
             @Override
             public Predicate toPredicate(Root<Permission> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get("value"),needPermission);
+                return criteriaBuilder.equal(root.get("value"), path);
             }
         };
         Optional<Permission> permission  = permissionRepository.findOne(specification);
-        return permission.filter(value -> value.getType() == 0).isPresent();
+        return permission.isPresent();
 
     }
 }
