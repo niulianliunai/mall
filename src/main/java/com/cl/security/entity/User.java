@@ -1,5 +1,6 @@
 package com.cl.security.entity;
 
+import com.cl.security.entity.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -18,12 +19,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table
-public class User  {
-
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+public class User extends BaseEntity {
 
 	private String username;
 

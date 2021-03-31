@@ -1,5 +1,6 @@
 package com.cl.security.entity;
 
+import com.cl.security.entity.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,10 +18,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table
-public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Role extends BaseEntity {
     private String name;
 
     @JsonBackReference

@@ -54,7 +54,7 @@ public class UserController {
     @GetMapping("permission")
     public CommonResult<Set<Permission>> getPermissionList(HttpServletRequest request) {
         Long userId = userService.getUserIdFromRequest(request);
-        Set<Permission> permissions = userService.getPermissionList(userId);
+        Set<Permission> permissions = userService.listPermission(userId);
         return CommonResult.success(permissions);
     }
 

@@ -26,8 +26,8 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return permissionList.stream()
-                .filter(permission -> permission.getValue() != null)
-                .map(permission -> new SimpleGrantedAuthority(permission.getValue()))
+                .filter(permission -> permission.getPath() != null)
+                .map(permission -> new SimpleGrantedAuthority(permission.getPath()))
                 .collect(Collectors.toList());
     }
 

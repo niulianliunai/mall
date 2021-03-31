@@ -72,7 +72,7 @@ public class UserService{
         return token;
     }
 
-    public User savaUser(User userParam) {
+    public User insert(User userParam) {
         User user = new User();
         BeanUtils.copyProperties(userParam, user);
         Specification<User> specification =
@@ -87,7 +87,7 @@ public class UserService{
 
         return userRepository.save(user);
     }
-    public Set<Permission> getPermissionList(Long id) {
+    public Set<Permission> listPermission(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         Set<Permission> permissions = new HashSet<>();
         userOptional.ifPresent(user -> user.getRoles().forEach(role ->

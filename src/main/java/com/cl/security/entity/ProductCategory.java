@@ -1,6 +1,7 @@
 package com.cl.security.entity;
 
 
+import com.cl.security.entity.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.Getter;
@@ -15,10 +16,7 @@ import java.util.Set;
 @Table(name = "product_category")
 @Getter
 @Setter
-public class ProductCategory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ProductCategory extends BaseEntity {
     private String name;
     private Integer level;
     private Integer productCount;

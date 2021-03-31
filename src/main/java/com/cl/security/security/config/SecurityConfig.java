@@ -105,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return username -> {
             User user = userService.getUserByUsername(username);
             if (user != null) {
-                Set<Permission> permissions = userService.getPermissionList(user.getId());
+                Set<Permission> permissions = userService.listPermission(user.getId());
                 return new UserDetailsImpl(user, new ArrayList<>(permissions));
             }
             throw new UsernameNotFoundException("用户名或密码错误");

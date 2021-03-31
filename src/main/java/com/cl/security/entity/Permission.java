@@ -1,5 +1,6 @@
 package com.cl.security.entity;
 
+import com.cl.security.entity.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,13 +19,11 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "permission")
-public class Permission {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Permission extends BaseEntity {
     private String name;
-    private String value;
-    private int type; // 0 公开 1 需要权限
+    @Column(nullable = false)
+    private String path;
+    private String description;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "permissions")
@@ -36,11 +35,11 @@ public class Permission {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Permission that = (Permission) o;
-        return value.equals(that.value);
+        return path.equals(that.path);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(path);
     }
 }
