@@ -1,10 +1,10 @@
 <template>
-<div class="app-container">menu</div>
+<div class="app-container">role</div>
 </template>
 
 <script>
 export default {
-  name: 'manage'
+  name: 'Role'
 }
 </script>
 

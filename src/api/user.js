@@ -8,9 +8,9 @@ export function login(data) {
   })
 }
 
-export function listMenu(params) {
+export function getMenu(params) {
   return request({
-    url: '/menu/list',
+    url: '/menu/get',
     method: 'get',
     params
   })

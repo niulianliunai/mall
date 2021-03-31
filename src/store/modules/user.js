@@ -1,7 +1,6 @@
-import { login, logout, getInfo, listMenu } from '@/api/user'
+import { login, logout, getInfo, getMenu } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { constantRoutes, resetRouter } from '@/router'
-import Layout from '@/layout'
 
 const getDefaultState = () => {
   return {
@@ -25,7 +24,7 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
-  },
+  }
 }
 
 const actions = {
@@ -55,27 +54,49 @@ const actions = {
         }
 
         const { id, name, avatar } = data
-        listMenu(id).then(response => {
+        getMenu({ id, type: 0 }).then(response => {
           const { data } = response
           for (let item of data) {
             let menu = {
               path: item.path,
+              name: item.name,
+              meta: { title: item.name, icon: item.icon },
               component: (resolve) => require(['@/layout'], resolve),
               redirect: item.redirect ? item.redirect : undefined,
+              hidden: item.hidden,
               children: []
             }
-            for (let child of item.children) {
-              menu.children.push({
-                path: child.path,
-                name: child.name,
-                component: (resolve) => require(['@/views' + child.component], resolve),
-                meta: { title: child.name, icon: child.icon }
-              })
-            }
             constantRoutes.push(menu)
+            handleChildren(menu, item.children)
           }
+
+          // for (let child of data.children) {
+          //   let menu1 = {
+          //     path: child.path,
+          //     name: child.name,
+          //     component: (resolve) => require(['@/views' + child.component], resolve),
+          //     redirect: child.redirect ? child.redirect : undefined,
+          //     meta: { title: child.name, icon: child.icon },
+          //   }
+          //   menu.children.push(menu1)
+          //   if (child.children.length>0) {
+          //     menu1.children = []
+          //     for (let child2 of child.children) {
+          //       let menu2 = {
+          //         path: child2.path,
+          //         name: child2.name,
+          //         component: (resolve) => require(['@/views' + child2.component], resolve),
+          //         meta: { title: child2.name, icon: child2.icon }
+          //       }
+          //       menu1.children.push(menu2)
+          //     }
+          //   }
+          // }
+          // constantRoutes.push(menu)
+
           constantRoutes.push({ path: '*', redirect: '/404', hidden: true })
           resetRouter()
+          router.push('')
         })
 
         commit('SET_NAME', name)
@@ -110,6 +131,27 @@ const actions = {
       resolve()
     })
   }
+}
+
+function handleChildren(menu, children) {
+  for (let child of children) {
+    let childMenu = {
+      path: child.path,
+      name: child.name,
+      meta: { title: child.name, icon: child.icon },
+      component: (resolve) => require(['@/views' + child.component], resolve),
+      hidden: child.hidden,
+      children: []
+    }
+    menu.children.push(childMenu)
+    handleChildren(childMenu, child.children)
+    if (childMenu.children.length < 1) {
+      childMenu.children = undefined
+    }
+
+
+  }
+
 }
 
 export default {
